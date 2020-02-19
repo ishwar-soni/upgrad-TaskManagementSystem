@@ -16,4 +16,8 @@ public class MainMenu {
     private void processInput ( String username, String passwd) {
 
     }
+
+    public static void exit() {
+        System.exit(0);
+    }
 }
