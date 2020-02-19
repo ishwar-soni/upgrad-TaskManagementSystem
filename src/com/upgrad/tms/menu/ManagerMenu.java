@@ -39,8 +39,8 @@ public class ManagerMenu implements OptionsMenu {
                 break;
             default:
                 wrongInput();
-
         }
+        showTopOptions();
     }
 
     private void getAllTasksBasedOnPriority() {
