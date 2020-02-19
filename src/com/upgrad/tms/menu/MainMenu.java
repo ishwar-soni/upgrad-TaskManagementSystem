@@ -14,6 +14,6 @@ public class MainMenu {
     }
 
     private void processInput ( String username, String passwd) {
-        
+
     }
 }
