@@ -14,7 +14,15 @@ public class MainMenu {
     }
 
     private void processInput ( String username, String passwd) {
+        if("manager".equals(username) && "manager".equals(passwd)){
+            showMenu(OptionsMenuType.PROJECT_MANAGER);
+        } else if ("assignee".equals(username) && "assignee".equals(passwd)){
+            showMenu (OptionsMenuType.ASSIGNEE);
+        }
+    }
 
+    private void showMenu (OptionsMenuType optionsMenuType) {
+        MenuFactory.getMenuByType(optionsMenuType).showTopOptions();
     }
 
     public static void exit() {
