@@ -1,5 +1,7 @@
 package com.upgrad.tms.menu;
 
+import com.upgrad.tms.exception.NotFoundException;
+
 public class MenuFactory {
     public static OptionsMenu getMenuByType(OptionsMenuType optionsMenuType) {
         switch (optionsMenuType){
@@ -8,7 +10,7 @@ public class MenuFactory {
             case ASSIGNEE:
                 return new AssigneeMenu();
         }
-        throw new RuntimeException("Options Menu Type not supported");
+        throw new NotFoundException("Options Menu Type not supported");
 
     }
 }
