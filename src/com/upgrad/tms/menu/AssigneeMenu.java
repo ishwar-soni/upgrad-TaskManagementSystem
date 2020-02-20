@@ -19,7 +19,9 @@ public class AssigneeMenu implements OptionsMenu {
             choice = sc.nextInt();
         } catch (InputMismatchException e) {
             System.out.println("Wrong input type, In input only numbers are allowed");
-            showTopOptions();
+            
+        } finally {
+            System.out.println("Always gets executed here");
         }
 
         switch (choice) {
