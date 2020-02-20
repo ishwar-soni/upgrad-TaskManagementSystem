@@ -8,6 +8,7 @@ public class MenuFactory {
             case ASSIGNEE:
                 return new AssigneeMenu();
         }
-        return null;
+        throw new RuntimeException("Options Menu Type not supported");
+
     }
 }
