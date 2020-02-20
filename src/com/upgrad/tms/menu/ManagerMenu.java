@@ -1,5 +1,6 @@
 package com.upgrad.tms.menu;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ManagerMenu implements OptionsMenu {
@@ -14,7 +15,12 @@ public class ManagerMenu implements OptionsMenu {
         System.out.println("5. Get all assignees who have a task on the given date");
         System.out.println("6. Get all tasks based on priority");
         System.out.println("7. Exit");
-        int choice = sc.nextInt();
+        int choice = -1;
+        try {
+            choice = sc.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Wrong input type; only numbers are allowed. Please enter again");
+        }
         switch (choice) {
             case 1:
                 createUser();
