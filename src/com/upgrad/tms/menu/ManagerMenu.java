@@ -14,8 +14,16 @@ public class ManagerMenu implements OptionsMenu {
 
     private AssigneeRepository assigneeRepository;
 
-    public ManagerMenu () throws IOException, ClassNotFoundException {
-        assigneeRepository = AssigneeRepository.getInstance();
+    public ManagerMenu () {
+        try {
+            assigneeRepository = AssigneeRepository.getInstance();
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found");
+            System.exit(1);
+        } catch (IOException io) {
+            System.out.println("io exception");
+            System.exit(1);
+        }
     }
 
     @Override
