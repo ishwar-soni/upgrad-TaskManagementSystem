@@ -10,18 +10,22 @@ public class ManagerRepository {
     private static ManagerRepository managerRepository;
     private ManagerMap managerCredentials;
 
-    public static ManagerRepository getInstance() {
+    public static ManagerRepository getInstance() throws IOException {
         if (managerRepository == null) {
             managerRepository = new ManagerRepository();
         }
         return managerRepository;
     }
 
-    private ManagerRepository() {
+    private ManagerRepository() throws IOException {
         initManagerCredentials();
     }
 
-    private void initManagerCredentials() {
+    private void initManagerCredentials() throws IOException {
+        File file = new File (Constants.MANAGER_FILE_NAME);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         managerCredentials = new ManagerMap();
         try (BufferedReader br = new BufferedReader(new FileReader(Constants.MANAGER_FILE_NAME))) {
             String line;
@@ -37,7 +41,7 @@ public class ManagerRepository {
         }
     }
 
-    private void saveManager(String userName, String password) {
+    public void saveManager(String userName, String password) {
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(Constants.MANAGER_FILE_NAME, true));
