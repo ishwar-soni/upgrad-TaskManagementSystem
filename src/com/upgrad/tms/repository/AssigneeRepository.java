@@ -23,6 +23,10 @@ public class AssigneeRepository {
     }
 
     private void initAssignee() throws IOException, ClassNotFoundException {
+        File file = new File(Constants.ASSIGNEE_FILE_NAME);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         try (
                 FileInputStream fi = new FileInputStream(new File(Constants.ASSIGNEE_FILE_NAME));
         ) {
@@ -31,7 +35,6 @@ public class AssigneeRepository {
                 assigneeList = (AssigneeList) oi.readObject();
                 oi.close();
             } else {
-                File file = new File(Constants.ASSIGNEE_FILE_NAME);
                 assigneeList = new AssigneeList();
             }
         }
