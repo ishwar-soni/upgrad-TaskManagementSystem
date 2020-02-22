@@ -3,6 +3,7 @@ package com.upgrad.tms.repository;
 import com.upgrad.tms.entities.Assignee;
 import com.upgrad.tms.exception.AssigneeListFullException;
 import com.upgrad.tms.util.AssigneeList;
+import com.upgrad.tms.util.Constants;
 
 import java.io.*;
 
@@ -23,13 +24,14 @@ public class AssigneeRepository {
 
     private void initAssignee() throws IOException, ClassNotFoundException {
         try (
-                FileInputStream fi = new FileInputStream(new File("assignee.txt"));
+                FileInputStream fi = new FileInputStream(new File(Constants.ASSIGNEE_FILE_NAME));
         ) {
             if (fi.available() > 0) {
                 ObjectInputStream oi = new ObjectInputStream(fi);
                 assigneeList = (AssigneeList) oi.readObject();
                 oi.close();
             } else {
+                File file = new File(Constants.ASSIGNEE_FILE_NAME);
                 assigneeList = new AssigneeList();
             }
         }
@@ -43,7 +45,7 @@ public class AssigneeRepository {
 
     public void updateListToFile() throws IOException{
         try (
-                FileOutputStream fileOutputStream = new FileOutputStream(new File("assignee.txt"));
+                FileOutputStream fileOutputStream = new FileOutputStream(new File(Constants.ASSIGNEE_FILE_NAME));
                 ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream)) {
             outputStream.writeObject(assigneeList);
         }
