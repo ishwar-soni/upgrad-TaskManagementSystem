@@ -14,6 +14,13 @@ public class AssigneeRepository {
         initAssignee();
     }
 
+    public static AssigneeRepository  getInstance() throws IOException, ClassNotFoundException{
+        if (assigneeRepository == null) {
+            assigneeRepository = new AssigneeRepository();
+        }
+        return assigneeRepository;
+    }
+
     private void initAssignee() throws IOException, ClassNotFoundException {
         try (
                 FileInputStream fi = new FileInputStream(new File("assignee.txt"));
@@ -28,16 +35,22 @@ public class AssigneeRepository {
         }
     }
 
-    public Assignee saveAssignee(Assignee assignee) throws AssigneeListFullException {
+    public Assignee saveAssignee(Assignee assignee) throws AssigneeListFullException, IOException {
         assigneeList.add(assignee);
         updateListToFile();
         return assignee;
     }
 
-    public void updateListToFile(){
-        FileOutputStream fileOutputStream = new FileOutputStream(new File("assignee.txt"));
-        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
-        outputStream.writeObject(assigneeList);
+    public void updateListToFile() throws IOException{
+        try (
+                FileOutputStream fileOutputStream = new FileOutputStream(new File("assignee.txt"));
+                ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream)) {
+            outputStream.writeObject(assigneeList);
+        }
+    }
+
+    public AssigneeList getAssigneeList() {
+        return assigneeList;
     }
 
 }
