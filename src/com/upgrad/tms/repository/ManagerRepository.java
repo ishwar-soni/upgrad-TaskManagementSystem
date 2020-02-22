@@ -45,8 +45,7 @@ public class ManagerRepository {
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(Constants.MANAGER_FILE_NAME, true));
-            String line = userName+","+password;
-            writer.newLine();
+            String line = userName+","+password+"\n";
             writer.write(line);
             writer.close();
         } catch (IOException e) {
