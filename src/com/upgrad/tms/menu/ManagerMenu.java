@@ -1,13 +1,12 @@
 package com.upgrad.tms.menu;
 
 import com.upgrad.tms.entities.Assignee;
-import com.upgrad.tms.exception.AssigneeListFullException;
+import com.upgrad.tms.exception.EntityListFullException;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.repository.ManagerRepository;
-import com.upgrad.tms.util.AssigneeList;
+import com.upgrad.tms.util.EntityList;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -92,7 +91,7 @@ public class ManagerMenu implements OptionsMenu {
     }
 
     private void displayAllUsers() {
-        AssigneeList allAssignees = assigneeRepository.getAssigneeList();
+        EntityList allAssignees = assigneeRepository.getAssigneeList();
         if (allAssignees.size() == 0) {
             System.out.println("No assignees has been added");
             return;
@@ -114,7 +113,7 @@ public class ManagerMenu implements OptionsMenu {
         Assignee assignee = new Assignee(assigneeRepository.getAssigneeList().size() + 1, name, username, password);
         try {
             assigneeRepository.saveAssignee(assignee);
-        } catch (AssigneeListFullException | IOException e) {
+        } catch (EntityListFullException | IOException e) {
             System.out.println(e.getMessage());
         }
     }
