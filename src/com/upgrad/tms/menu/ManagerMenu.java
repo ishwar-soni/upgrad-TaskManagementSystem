@@ -13,10 +13,7 @@ import com.upgrad.tms.util.TaskStatus;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ManagerMenu implements OptionsMenu {
 
@@ -43,7 +40,7 @@ public class ManagerMenu implements OptionsMenu {
         System.out.println("2. Display all users");
         System.out.println("3. Create another manager");
         System.out.println("4. Create task and assign");
-        System.out.println("5. Get all assignees who have a task on the given date");
+        System.out.println("5. Get all unique assignees who have a task on the given date");
         System.out.println("6. Get all tasks based on priority");
         System.out.println("7. Exit");
         int choice = -1;
@@ -66,7 +63,7 @@ public class ManagerMenu implements OptionsMenu {
                 createTaskAndAssign(); //done
                 break;
             case 5:
-                getAssigneesForSpecificDate();
+                getUniqueAssigneesForSpecificDate(); //done
                 break;
             case 6:
                 getAllTasksBasedOnPriority();
@@ -83,7 +80,18 @@ public class ManagerMenu implements OptionsMenu {
     private void getAllTasksBasedOnPriority() {
     }
 
-    private void getAssigneesForSpecificDate() {
+    private void getUniqueAssigneesForSpecificDate() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the due date for which you want to get all the users who have pending tasks");
+        Date specificDateForPendingUser = getDateFromUser(sc, DateUtils.DateFormat.DAY_MONTH_YEAR_SLASH_SEPARATED);
+        Collection<Assignee> assignees = assigneeRepository.getUniqueAssigneesForSpecificDate(specificDateForPendingUser);
+        if (assignees.isEmpty()) {
+            System.out.println("No assignees are there for the given due date");
+        }
+        for (Assignee assignee: assignees) {
+            System.out.println("Id: " + assignee.getId() + " Name: " + assignee.getName() + " UserName: " +
+                    assignee.getUsername() + " Total tasks: " + assignee.getTaskCalendar().getTaskList().size());
+        }
     }
 
     private void createTaskAndAssign() {
