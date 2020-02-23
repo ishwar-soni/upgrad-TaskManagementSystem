@@ -42,6 +42,10 @@ public class MainMenu {
             } else if (assigneeRepository.isValidCredentials(username, passwd)) {
                 showMenu(OptionsMenuType.ASSIGNEE);
             }
+            else {
+                System.out.println("Credentials are not valid. Please try again.");
+                getLoginDetails();
+            }
         }
     }
 
