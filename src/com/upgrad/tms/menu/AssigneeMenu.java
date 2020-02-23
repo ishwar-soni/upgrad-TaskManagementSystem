@@ -45,7 +45,7 @@ public class AssigneeMenu implements OptionsMenu {
                 seeTodayTasks(); //done
                 break;
             case 3:
-                seeTaskSortedOnPriority();
+                seeTaskSortedOnPriority();//done
                 break;
             case 4:
                 seeTaskByCategory(); //done
@@ -94,6 +94,24 @@ public class AssigneeMenu implements OptionsMenu {
     }
 
     private void seeTaskSortedOnPriority() {
+        if (MainMenu.loggedInUserName != null) {
+            Assignee assignee = assigneeRepository.getAssignee(MainMenu.loggedInUserName);
+            List<Task> taskList = assignee.getTaskCalendar().getTaskList();
+            PriorityQueue<Task> taskPriorityQueue = new PriorityQueue<>(new Comparator<Task>() {
+                @Override
+                public int compare(Task t1, Task t2) {
+                    return t1.getPriority() - t2.getPriority();
+                }
+            });
+            for (Task task : taskList) {
+                if (DateUtils.isSameDate(task.getDueDate(), Calendar.getInstance().getTime())) {
+                    taskPriorityQueue.add(task);
+                }
+            }
+            while (!taskPriorityQueue.isEmpty()) {
+                taskPriorityQueue.poll().printTaskOnConsole();
+            }
+        }
     }
 
     private void seeTodayTasks() {
