@@ -3,11 +3,10 @@ package com.upgrad.tms.menu;
 import com.upgrad.tms.entities.Assignee;
 import com.upgrad.tms.entities.Task;
 import com.upgrad.tms.repository.AssigneeRepository;
+import com.upgrad.tms.util.DateUtils;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class AssigneeMenu implements OptionsMenu {
     private AssigneeRepository assigneeRepository;
@@ -67,6 +66,21 @@ public class AssigneeMenu implements OptionsMenu {
     }
 
     private void seeTodayTasks() {
+        if (MainMenu.loggedInUserName != null) {
+            Assignee assignee = assigneeRepository.getAssignee(MainMenu.loggedInUserName);
+            List<Task> taskList = assignee.getTaskCalendar().getTaskList();
+            List<Task> todayTaskList = new ArrayList<>();
+            for (Task task : taskList) {
+                if (DateUtils.isSameDate(task.getDueDate(), Calendar.getInstance().getTime())) {
+                    todayTaskList.add(task);
+                }
+            }
+            if (todayTaskList.isEmpty()) {
+                System.out.println("Hurray! No task for today");
+            } else {
+                printTaskList(todayTaskList);
+            }
+        }
     }
 
     private void seeAllTasks() {
