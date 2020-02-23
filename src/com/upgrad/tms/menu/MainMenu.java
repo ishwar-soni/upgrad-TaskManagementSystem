@@ -1,8 +1,25 @@
 package com.upgrad.tms.menu;
 
+import com.upgrad.tms.repository.AssigneeRepository;
+import com.upgrad.tms.repository.ManagerRepository;
+import com.upgrad.tms.util.Constants;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MainMenu {
+    private ManagerRepository managerRepository;
+    private AssigneeRepository assigneeRepository;
+
+    public MainMenu() {
+        try {
+            managerRepository = ManagerRepository.getInstance();
+            assigneeRepository = AssigneeRepository.getInstance();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void getLoginDetails() {
         Scanner sc = new Scanner (System.in);
@@ -14,10 +31,17 @@ public class MainMenu {
     }
 
     private void processInput ( String username, String passwd) {
-        if("manager".equals(username) && "manager".equals(passwd)){
-            showMenu(OptionsMenuType.PROJECT_MANAGER);
-        } else if ("assignee".equals(username) && "assignee".equals(passwd)){
-            showMenu (OptionsMenuType.ASSIGNEE);
+        File file = new File (Constants.MANAGER_FILE_NAME);
+        if (!file.exists()) {
+            if("manager".equals(username) && "manager".equals(passwd)){
+                showMenu(OptionsMenuType.PROJECT_MANAGER);
+            }
+        } else {
+            if (managerRepository.isValidCredentials(username, passwd)) {
+                showMenu(OptionsMenuType.PROJECT_MANAGER);
+            } else if (assigneeRepository.isValidCredentials(username, passwd)) {
+                showMenu(OptionsMenuType.ASSIGNEE);
+            }
         }
     }
 

@@ -58,4 +58,6 @@ public class AssigneeRepository {
         return assigneeList;
     }
 
+    public boolean isValidCredentials(String username, String passwd) {
+    }
 }
