@@ -2,7 +2,9 @@ package com.upgrad.tms.menu;
 
 import com.upgrad.tms.entities.Assignee;
 
+import com.upgrad.tms.entities.Meeting;
 import com.upgrad.tms.entities.Task;
+import com.upgrad.tms.entities.Todo;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.repository.ManagerRepository;
 
@@ -96,14 +98,40 @@ public class ManagerMenu implements OptionsMenu {
         Assignee assignee = getAssigneeForTask(sc);
         task.setId((long)assignee.getTaskCalendar().getTaskList().size() + 1);
         assignee.getTaskCalendar().add(task);
-        assigneeRepository.updateListToFile();
+        try {
+            assigneeRepository.updateListToFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Assignee getAssigneeForTask (Scanner sc) {
+        
     }
 
     private Task createTodo() {
-
+        Scanner sc = new Scanner(System.in);
+        Todo todo = new Todo();
+        fillTaskValues(sc, todo);
+        System.out.print("Enter description: ");
+        todo.setDescription(sc.nextLine());
+        return todo;
     }
 
     private Task createMeeting() {
+        Scanner sc = new Scanner(System.in);
+        Meeting meeting = new Meeting();
+        fillTaskValues(sc, meeting);
+        System.out.print("Enter meeting agenda: ");
+        meeting.setAgenda(sc.nextLine());
+        System.out.print("Enter location: ");
+        meeting.setLocation(sc.nextLine());
+        System.out.print("Enter meeting url: ");
+        meeting.setUrl(sc.nextLine());
+        return meeting;
+    }
+
+    private void fillTaskValues (Scanner sc, Task task) {
 
     }
 
