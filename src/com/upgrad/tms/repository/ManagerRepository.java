@@ -55,5 +55,6 @@ public class ManagerRepository {
     }
 
     public boolean isValidCredentials(String username, String passwd) {
+        return managerCredentials.containsKey(username) && managerCredentials.get(username).equals(passwd);
     }
 }
