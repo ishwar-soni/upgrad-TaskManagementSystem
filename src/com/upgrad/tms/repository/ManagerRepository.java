@@ -2,13 +2,14 @@ package com.upgrad.tms.repository;
 
 import com.upgrad.tms.exception.ManagerMapFullException;
 import com.upgrad.tms.util.Constants;
-import com.upgrad.tms.util.ManagerMap;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ManagerRepository {
     private static ManagerRepository managerRepository;
-    private ManagerMap managerCredentials;
+    private Map<String, String> managerCredentials;
 
     public static ManagerRepository getInstance() throws IOException {
         if (managerRepository == null) {
@@ -26,7 +27,7 @@ public class ManagerRepository {
         if (!file.exists()) {
             file.createNewFile();
         }
-        managerCredentials = new ManagerMap();
+        managerCredentials = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(Constants.MANAGER_FILE_NAME))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -36,8 +37,6 @@ public class ManagerRepository {
         } catch (IOException e) {
             System.out.println("IO Exception handling");
             e.printStackTrace();
-        } catch (ManagerMapFullException e) {
-            System.out.println(e.getMessage());
         }
     }
 
