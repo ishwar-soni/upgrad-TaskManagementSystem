@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class MainMenu {
     private ManagerRepository managerRepository;
     private AssigneeRepository assigneeRepository;
+    public static String loggedInUserName;
 
     public MainMenu() {
         try {
@@ -40,6 +41,7 @@ public class MainMenu {
             if (managerRepository.isValidCredentials(username, passwd)) {
                 showMenu(OptionsMenuType.PROJECT_MANAGER);
             } else if (assigneeRepository.isValidCredentials(username, passwd)) {
+                loggedInUserName = username;
                 showMenu(OptionsMenuType.ASSIGNEE);
             }
             else {
