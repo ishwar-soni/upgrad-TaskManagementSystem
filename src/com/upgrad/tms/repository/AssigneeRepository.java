@@ -60,7 +60,7 @@ public class AssigneeRepository {
 
     public boolean isValidCredentials(String username, String passwd) {
         for (Assignee assignee: assigneeList.getAssignees()) {
-            if (assignee.getUsername().equals(username) &&
+            if (assignee != null && assignee.getUsername().equals(username) &&
                 assignee.getPassword().equals(passwd)) {
                 return true;
             }
