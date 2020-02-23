@@ -2,6 +2,7 @@ package com.upgrad.tms.menu;
 
 import com.upgrad.tms.entities.Assignee;
 
+import com.upgrad.tms.entities.Task;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.repository.ManagerRepository;
 
@@ -56,7 +57,7 @@ public class ManagerMenu implements OptionsMenu {
                 createManager();//done
                 break;
             case 4:
-                createTaskAndAssign();
+                createTaskAndAssign(); //done
                 break;
             case 5:
                 getAssigneesForSpecificDate();
@@ -80,6 +81,30 @@ public class ManagerMenu implements OptionsMenu {
     }
 
     private void createTaskAndAssign() {
+        Scanner sc = new Scanner(System.in);
+        Task task;
+        int taskChoice = 0;
+        while (!(taskChoice == 1 || taskChoice == 2)) {
+            System.out.println("Enter task type.\n 1. Todo \n 2. Meeting");
+            taskChoice = sc.nextInt();
+        }
+        if (taskChoice == 1) {
+            task = createTodo();
+        } else {
+            task = createMeeting();
+        }
+        Assignee assignee = getAssigneeForTask(sc);
+        task.setId((long)assignee.getTaskCalendar().getTaskList().size() + 1);
+        assignee.getTaskCalendar().add(task);
+        assigneeRepository.updateListToFile();
+    }
+
+    private Task createTodo() {
+
+    }
+
+    private Task createMeeting() {
+
     }
 
     private void createManager() {
