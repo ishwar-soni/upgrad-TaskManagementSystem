@@ -7,9 +7,13 @@ import com.upgrad.tms.entities.Task;
 import com.upgrad.tms.entities.Todo;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.repository.ManagerRepository;
+import com.upgrad.tms.util.DateUtils;
+import com.upgrad.tms.util.TaskStatus;
 
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -106,7 +110,16 @@ public class ManagerMenu implements OptionsMenu {
     }
 
     private Assignee getAssigneeForTask (Scanner sc) {
-        
+        Assignee assignee = null;
+        do {
+            System.out.println("Enter username whom to assign task");
+            String username = sc.next();
+            assignee = assigneeRepository.getAssignee(username);
+            if (assignee == null) {
+                System.out.println("Assignee not found for the username: "+username);
+            }
+        } while (assignee == null);
+        return assignee;
     }
 
     private Task createTodo() {
@@ -132,7 +145,31 @@ public class ManagerMenu implements OptionsMenu {
     }
 
     private void fillTaskValues (Scanner sc, Task task) {
+        System.out.print("Enter title of the task: ");
+        String title = sc.nextLine();
+        System.out.println("Enter priority of the task [High-Low] [1-5]: ");
+        int priority = sc.nextInt();
+        //Just to read \n from the previous nextInt() reading
+        sc.nextLine();
+        Date dueDate = getDateFromUser(sc, DateUtils.DateFormat.DAY_MONTH_YEAR_HOUR_MIN_SLASH_SEPARATED);
+        task.setTitle(title);
+        task.setPriority(priority);
+        task.setDueDate(dueDate);
+        task.setStatus(TaskStatus.PENDING);
+    }
 
+    private Date getDateFromUser(Scanner sc, String dateFormat) {
+        Date formattedDate = null;
+        do {
+            System.out.println("Enter due date ["+ dateFormat+"]: ");
+            String dueDateString = sc.nextLine();
+            try {
+                formattedDate = DateUtils.getFormattedDate(dueDateString, dateFormat);
+            } catch (ParseException e) {
+                System.out.println("Wrong date format, Please enter correct date");
+            }
+        } while (formattedDate == null);
+        return formattedDate;
     }
 
     private void createManager() {
