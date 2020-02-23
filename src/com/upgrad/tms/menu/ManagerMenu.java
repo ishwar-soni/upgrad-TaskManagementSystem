@@ -91,7 +91,7 @@ public class ManagerMenu implements OptionsMenu {
     }
 
     private void displayAllUsers() {
-        EntityList allAssignees = assigneeRepository.getAssigneeList();
+        EntityList<Assignee> allAssignees = assigneeRepository.getAssigneeList();
         if (allAssignees.size() == 0) {
             System.out.println("No assignees has been added");
             return;
