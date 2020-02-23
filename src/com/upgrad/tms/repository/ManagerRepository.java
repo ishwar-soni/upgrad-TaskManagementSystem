@@ -54,4 +54,6 @@ public class ManagerRepository {
         }
     }
 
+    public boolean isValidCredentials(String username, String passwd) {
+    }
 }
