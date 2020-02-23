@@ -8,6 +8,7 @@ import com.upgrad.tms.entities.Todo;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.repository.ManagerRepository;
 import com.upgrad.tms.util.DateUtils;
+import com.upgrad.tms.util.KeyValuePair;
 import com.upgrad.tms.util.TaskStatus;
 
 
@@ -66,7 +67,7 @@ public class ManagerMenu implements OptionsMenu {
                 getUniqueAssigneesForSpecificDate(); //done
                 break;
             case 6:
-                getAllTasksBasedOnPriority();
+                getAllTasksBasedOnPriority(); //done
                 break;
             case 7:
                 MainMenu.exit();
@@ -78,6 +79,14 @@ public class ManagerMenu implements OptionsMenu {
     }
 
     private void getAllTasksBasedOnPriority() {
+        PriorityQueue<KeyValuePair<Task, String>> priorityQueue = assigneeRepository.getAllTaskAssigneePairByPriority();
+        while (!priorityQueue.isEmpty()) {
+            KeyValuePair<Task, String> pair = priorityQueue.poll();
+            Task task = pair.getKey();
+            System.out.println("Task priority: "+ task.getPriority()
+                    + " Title: "+task.getTitle()
+                    + " User: "+pair.getValue());
+        }
     }
 
     private void getUniqueAssigneesForSpecificDate() {
