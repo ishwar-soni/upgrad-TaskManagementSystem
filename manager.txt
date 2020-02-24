@@ -1,4 +1,0 @@
-yyyy,yyyy
-kkkk,kkkk
-rrrr,rrrr
-mannnn,mannnn

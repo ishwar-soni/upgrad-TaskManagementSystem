@@ -33,7 +33,7 @@ public class MainMenu {
 
     private void processInput ( String username, String passwd) {
         File file = new File (Constants.MANAGER_FILE_NAME);
-        if (!file.exists()) {
+        if (!file.exists() || file.length() == 0) {
             if("manager".equals(username) && "manager".equals(passwd)){
                 showMenu(OptionsMenuType.PROJECT_MANAGER);
             }
