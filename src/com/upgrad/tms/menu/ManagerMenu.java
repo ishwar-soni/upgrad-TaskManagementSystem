@@ -7,12 +7,14 @@ import com.upgrad.tms.entities.Task;
 import com.upgrad.tms.entities.Todo;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.repository.ManagerRepository;
+import com.upgrad.tms.repository.MySQLManagerRepository;
 import com.upgrad.tms.util.DateUtils;
 import com.upgrad.tms.util.KeyValuePair;
 import com.upgrad.tms.util.TaskStatus;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -20,17 +22,21 @@ public class ManagerMenu implements OptionsMenu {
 
     private AssigneeRepository assigneeRepository;
     private ManagerRepository managerRepository;
+    private MySQLManagerRepository mySQLManagerRepository;
 
     public ManagerMenu () {
         try {
             assigneeRepository = AssigneeRepository.getInstance();
             managerRepository = ManagerRepository.getInstance();
+            mySQLManagerRepository = MySQLManagerRepository.getInstance();
         } catch (ClassNotFoundException ex) {
             System.out.println("Class not found");
             System.exit(1);
         } catch (IOException io) {
             System.out.println("io exception");
             System.exit(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -195,7 +201,8 @@ public class ManagerMenu implements OptionsMenu {
         String username = getUserName(sc);
         System.out.println("Enter password");
         String password = sc.nextLine();
-        managerRepository.saveManager(username, password);
+        //managerRepository.saveManager(username, password);
+        mySQLManagerRepository.saveManager(username, password);
     }
 
     private void displayAllUsers() {
