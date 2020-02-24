@@ -3,10 +3,7 @@ package com.upgrad.tms.repository;
 import com.upgrad.tms.util.Constants;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +44,7 @@ public class MySQLManagerRepository {
     }
 
     public void saveManager(String userName, String password){
-        String sql = "insert into manager ('username', 'password') values ('"+userName+"', '"+password+"')";
+        String sql = "insert into manager (username, password) values ('"+userName+"', '"+password+"')";
         try {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
@@ -57,7 +54,16 @@ public class MySQLManagerRepository {
     }
 
     public boolean isValidCredentials(String username, String passwd) {
-        return managerCredentials.containsKey(username) && managerCredentials.get(username).equals(passwd);
+        String sql = "select * from manager where username = '"+username+"', password = '"+passwd;
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+        //return managerCredentials.containsKey(username) && managerCredentials.get(username).equals(passwd);
     }
 
     public boolean isManager (String username) {
