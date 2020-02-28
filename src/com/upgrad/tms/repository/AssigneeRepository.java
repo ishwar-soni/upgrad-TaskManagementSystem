@@ -10,6 +10,8 @@ import com.upgrad.tms.util.KeyValuePair;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AssigneeRepository {
     private List<Assignee> assigneeList;
@@ -41,9 +43,14 @@ public class AssigneeRepository {
                 assigneeList = (List<Assignee>) oi.readObject();
                 oi.close();
                 assigneeMap = new HashMap<>();
-                for (Assignee assignee: assigneeList) {
+                /*for (Assignee assignee: assigneeList) {
                     assigneeMap.put(assignee.getUsername(), assignee);
-                }
+                }*/
+                /*assigneeList.forEach( assignee -> {
+                    assigneeMap.put(assignee.getUsername(), assignee);
+                });*/
+                /*assigneeMap = assigneeList.stream().collect(Collectors.toMap(assignee -> assignee.getUsername(), valueAssignee -> valueAssignee));*/
+                assigneeMap = assigneeList.stream().collect(Collectors.toMap(Assignee::getUsername, Function.identity()));
             } else {
                 assigneeList = new ArrayList<Assignee>();
                 assigneeMap = new HashMap<>();
