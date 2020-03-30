@@ -37,17 +37,16 @@ public class MainMenu {
             if("manager".equals(username) && "manager".equals(passwd)){
                 showMenu(OptionsMenuType.PROJECT_MANAGER);
             }
-        } else {
-            if (managerRepository.isValidCredentials(username, passwd)) {
-                showMenu(OptionsMenuType.PROJECT_MANAGER);
-            } else if (assigneeRepository.isValidCredentials(username, passwd)) {
-                loggedInUserName = username;
-                showMenu(OptionsMenuType.ASSIGNEE);
-            }
-            else {
-                System.out.println("Credentials are not valid. Please try again.");
-                getLoginDetails();
-            }
+        }
+        if (managerRepository.isValidCredentials(username, passwd)) {
+            showMenu(OptionsMenuType.PROJECT_MANAGER);
+        } else if (assigneeRepository.isValidCredentials(username, passwd)) {
+            loggedInUserName = username;
+            showMenu(OptionsMenuType.ASSIGNEE);
+        }
+        else {
+            System.out.println("Credentials are not valid. Please try again.");
+            getLoginDetails();
         }
     }
 
