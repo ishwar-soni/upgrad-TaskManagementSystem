@@ -28,16 +28,16 @@ public class ManagerMenu implements OptionsMenu {
         try {
             assigneeRepository = AssigneeRepository.getInstance();
             managerRepository = ManagerRepository.getInstance();
-            mySQLManagerRepository = MySQLManagerRepository.getInstance();
+            //mySQLManagerRepository = MySQLManagerRepository.getInstance();
         } catch (ClassNotFoundException ex) {
             System.out.println("Class not found");
             System.exit(1);
         } catch (IOException io) {
             System.out.println("io exception");
             System.exit(1);
-        } catch (SQLException e) {
+        }/* catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
@@ -201,8 +201,8 @@ public class ManagerMenu implements OptionsMenu {
         String username = getUserName(sc);
         System.out.println("Enter password");
         String password = sc.nextLine();
-        //managerRepository.saveManager(username, password);
-        mySQLManagerRepository.saveManager(username, password);
+        managerRepository.saveManager(username, password);
+        //mySQLManagerRepository.saveManager(username, password);
     }
 
     private void displayAllUsers() {
