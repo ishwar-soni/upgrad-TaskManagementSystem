@@ -1,5 +1,6 @@
 package com.upgrad.tms.repository;
 
+import com.upgrad.tms.administration.ConceptsLearned;
 import com.upgrad.tms.entities.Assignee;
 import com.upgrad.tms.entities.Task;
 import com.upgrad.tms.exception.EntityListFullException;
@@ -96,6 +97,7 @@ public class AssigneeRepository {
      * @param specificDate
      * @return
      */
+    @ConceptsLearned(concepts = {"Stream", "filter", "anyMatch", "Collectors", "Set"}, difficultyLevel = ConceptsLearned.DifficultyLevel.HARD)
     public Collection<Assignee> getUniqueAssigneesForSpecificDate(Date specificDate) {
         /*Set<Assignee> filteredAssignees = new HashSet<>();
         for (Assignee assignee: getAssigneeList()) {
@@ -113,6 +115,7 @@ public class AssigneeRepository {
      * This method we have learned PriorityQueue
      * @return
      */
+    @ConceptsLearned(concepts = {"PriorityQueue"})
     public PriorityQueue<KeyValuePair<Task, String>> getAllTaskAssigneePairByPriority() {
         //using priority queue and passing comparator which will check on the priority of the task
         PriorityQueue<KeyValuePair<Task, String>> priorityQueue = new PriorityQueue<>(new Comparator<KeyValuePair<Task, String>>() {
