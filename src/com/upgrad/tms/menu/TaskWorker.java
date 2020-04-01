@@ -6,7 +6,7 @@ import com.upgrad.tms.util.TaskStatus;
 
 import java.io.IOException;
 
-public class TaskWorker {
+public class TaskWorker extends Thread{
     private final Task task;
     private final AssigneeRepository assigneeRepository;
 
@@ -15,7 +15,7 @@ public class TaskWorker {
         this.assigneeRepository = assigneeRepository;
     }
 
-    public void doWork() {
+    private void doWork() {
         if (task.getTaskStatus() == TaskStatus.DONE) {
             return;
         }
@@ -41,5 +41,11 @@ public class TaskWorker {
         } finally {
             System.out.println("Exiting updatInFile");
         }
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        doWork();
     }
 }
