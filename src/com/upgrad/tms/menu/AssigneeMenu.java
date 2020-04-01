@@ -83,7 +83,8 @@ public class AssigneeMenu implements OptionsMenu {
                 }
             }
         } while (taskId != -1);
-        new CompositeWorker(taskList, assigneeRepository).start();
+        Thread thread = new Thread(new CompositeWorker(taskList, assigneeRepository));
+        thread.start();
     }
 
     private void changeTaskStatus() {
@@ -95,7 +96,8 @@ public class AssigneeMenu implements OptionsMenu {
             taskId = sc.nextLong();
             task = assigneeRepository.getTaskById(taskId);
         } while (task == null);
-        new TaskWorker(task, assigneeRepository).start();
+        Thread thread = new Thread(new TaskWorker(task, assigneeRepository));
+        thread.start();
     }
 
     @Override
