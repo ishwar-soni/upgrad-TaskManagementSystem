@@ -71,6 +71,7 @@ public class AssigneeMenu implements OptionsMenu {
             taskId = sc.nextLong();
             task = assigneeRepository.getTaskById(taskId);
         } while (task == null);
+        new TaskWorker(task, assigneeRepository).doWork();
     }
 
     @Override
