@@ -96,7 +96,10 @@ public class AssigneeMenu implements OptionsMenu {
             taskId = sc.nextLong();
             task = assigneeRepository.getTaskById(taskId);
         } while (task == null);
+        Thread currentThread = Thread.currentThread();
+        System.out.println("Current thread: "+currentThread.getName());
         Thread thread = new Thread(new TaskWorker(task, assigneeRepository));
+        System.out.println("User Thread: "+thread.getName());
         thread.start();
     }
 
