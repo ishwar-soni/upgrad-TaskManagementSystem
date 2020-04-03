@@ -7,6 +7,7 @@ import com.upgrad.tms.entities.Todo;
 import com.upgrad.tms.exception.NotFoundException;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.util.DateUtils;
+import com.upgrad.tms.util.TaskStatus;
 
 import java.io.IOException;
 import java.util.*;
@@ -33,6 +34,7 @@ public class AssigneeMenu implements OptionsMenu {
         System.out.println("5. Change task status");
         System.out.println("6. Change multiple task status together");
         System.out.println("7. Exit");
+        System.out.println("8. Change all task status to pending");
         int choice = 0;
 
             choice = sc.nextInt();
@@ -60,10 +62,23 @@ public class AssigneeMenu implements OptionsMenu {
             case 7:
                 MainMenu.exit();
                 break;
+            case 8:
+                changeTaskStatusToPending();
+                break;
             default:
                 wrongInput();
         }
 //        showTopOptions();
+    }
+
+    private void changeTaskStatusToPending() {
+        assigneeRepository.getAssignee(MainMenu.loggedInUserName).getTaskCalendar()
+                .getTaskList().stream().forEach(task -> task.setStatus(TaskStatus.PENDING));
+        try {
+            assigneeRepository.updateListToFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void changeMultipleTaskStatus() {
