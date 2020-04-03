@@ -67,7 +67,7 @@ public class AssigneeRepository {
         return assignee;
     }
 
-    public void updateListToFile() throws IOException{
+    public synchronized void updateListToFile() throws IOException{
         try (
                 FileOutputStream fileOutputStream = new FileOutputStream(new File(Constants.ASSIGNEE_FILE_NAME));
                 ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream)) {
