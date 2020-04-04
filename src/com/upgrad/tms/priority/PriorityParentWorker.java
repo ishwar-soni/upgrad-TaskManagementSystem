@@ -11,15 +11,21 @@ import java.util.List;
 public class PriorityParentWorker implements Runnable {
 
     private List<Task> taskList;
+    private ShareObject shareObject;
 
-    public PriorityParentWorker(List<Task> taskList) {
+    public PriorityParentWorker(List<Task> taskList, ShareObject shareObject) {
         this.taskList = taskList;
+        this.shareObject = shareObject;
     }
 
     @Override
     public void run() {
         while (taskList.stream().anyMatch(task -> !task.getTaskStatus().equals(TaskStatus.DONE))) {
+            if (!taskList.stream().anyMatch(task -> task.getPriority() < ShareObject.priorityCounter)) {
+                ShareObject.priorityCounter++;
+            } else {
 
+            }
         }
     }
 }
