@@ -33,8 +33,9 @@ public class AssigneeMenu implements OptionsMenu {
         System.out.println("4. Tasks by task category");
         System.out.println("5. Change task status");
         System.out.println("6. Change multiple task status together");
-        System.out.println("7. Exit");
-        System.out.println("8. Change all task status to pending");
+        System.out.println("7. Run task according to the priority");
+        System.out.println("8. Exit");
+        System.out.println("9. Change all task status to pending");
         int choice = 0;
 
             choice = sc.nextInt();
@@ -60,15 +61,23 @@ public class AssigneeMenu implements OptionsMenu {
                 changeMultipleTaskStatus();
                 break;
             case 7:
-                MainMenu.exit();
+                runTaskAccordingToPriority();
                 break;
             case 8:
+                MainMenu.exit();
+                break;
+            case 9:
                 changeTaskStatusToPending();
                 break;
             default:
                 wrongInput();
         }
-//        showTopOptions();
+        showTopOptions();
+    }
+
+    private void runTaskAccordingToPriority() {
+        List<Task> taskList = assigneeRepository.getAssignee(MainMenu.loggedInUserName).getTaskCalendar().getTaskList();
+
     }
 
     private void changeTaskStatusToPending() {
