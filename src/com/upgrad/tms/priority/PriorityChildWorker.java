@@ -19,9 +19,16 @@ public class PriorityChildWorker extends AbstractWorker implements Runnable {
     @Override
     public void doWork() {
         while (task.getTaskStatus() != TaskStatus.DONE) {
-            if (ShareObject.priorityCounter == task.getPriority()) {
+            if (ShareObject.priorityCounter < task.getPriority()) {
+                try {
+                    shareObject.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
                 processTask(task);
                 updateInFile();
+                shareObject.notifyAll();
             }
         }
     }

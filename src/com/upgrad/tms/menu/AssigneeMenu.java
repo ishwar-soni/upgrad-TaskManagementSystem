@@ -5,6 +5,9 @@ import com.upgrad.tms.entities.Meeting;
 import com.upgrad.tms.entities.Task;
 import com.upgrad.tms.entities.Todo;
 import com.upgrad.tms.exception.NotFoundException;
+import com.upgrad.tms.priority.PriorityChildWorker;
+import com.upgrad.tms.priority.PriorityParentWorker;
+import com.upgrad.tms.priority.ShareObject;
 import com.upgrad.tms.repository.AssigneeRepository;
 import com.upgrad.tms.util.DateUtils;
 import com.upgrad.tms.util.TaskStatus;
@@ -77,7 +80,11 @@ public class AssigneeMenu implements OptionsMenu {
 
     private void runTaskAccordingToPriority() {
         List<Task> taskList = assigneeRepository.getAssignee(MainMenu.loggedInUserName).getTaskCalendar().getTaskList();
-
+        ShareObject shareObject = new ShareObject();
+        Thread parentThread = new Thread(new PriorityParentWorker(taskList, shareObject));
+        parentThread.start();
+        taskList.stream().map(task -> new Thread(new PriorityChildWorker(assigneeRepository, task, shareObject)))
+                .forEach(Thread::start);
     }
 
     private void changeTaskStatusToPending() {

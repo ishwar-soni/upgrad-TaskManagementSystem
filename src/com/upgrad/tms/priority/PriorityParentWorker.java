@@ -23,9 +23,16 @@ public class PriorityParentWorker implements Runnable {
         while (taskList.stream().anyMatch(task -> !task.getTaskStatus().equals(TaskStatus.DONE))) {
             if (!taskList.stream().anyMatch(task -> task.getPriority() < ShareObject.priorityCounter)) {
                 ShareObject.priorityCounter++;
+                shareObject.notifyAll();
             } else {
-
+                try {
+                    System.out.println("Parent is waiting on priority "+ShareObject.priorityCounter);
+                    shareObject.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
+        System.out.println("All the tasks are marked done");
     }
 }
