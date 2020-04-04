@@ -21,15 +21,18 @@ public class PriorityParentWorker implements Runnable {
     @Override
     public void run() {
         while (taskList.stream().anyMatch(task -> !task.getTaskStatus().equals(TaskStatus.DONE))) {
-            if (!taskList.stream().anyMatch(task -> task.getPriority() < ShareObject.priorityCounter)) {
-                ShareObject.priorityCounter++;
-                shareObject.notifyAll();
-            } else {
-                try {
-                    System.out.println("Parent is waiting on priority "+ShareObject.priorityCounter);
-                    shareObject.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            synchronized (shareObject) {
+                if (!taskList.stream().filter(task -> task.getTaskStatus() != TaskStatus.DONE).anyMatch(task -> task.getPriority() < ShareObject.priorityCounter)) {
+                    System.out.println("Increasing the priority counter");
+                    ShareObject.priorityCounter++;
+                    shareObject.notifyAll();
+                } else {
+                    try {
+                        System.out.println("Parent is waiting on priority " + ShareObject.priorityCounter);
+                        shareObject.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
