@@ -26,6 +26,7 @@ public class MeetingUrlLocationWorker implements Runnable {
             System.out.println("Detailed url: "+urlLocator.getUrlDetails(meeting.getUrl()));
             System.out.println("Getting location locator");
             synchronized (locationLocator) {
+                System.out.println("Got location locator");
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
