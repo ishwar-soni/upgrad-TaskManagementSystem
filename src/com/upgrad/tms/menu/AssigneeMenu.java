@@ -1,5 +1,7 @@
 package com.upgrad.tms.menu;
 
+import com.upgrad.tms.countdownlatch.ChildWorker;
+import com.upgrad.tms.countdownlatch.ParentWorker;
 import com.upgrad.tms.entities.Assignee;
 import com.upgrad.tms.entities.Meeting;
 import com.upgrad.tms.entities.Task;
@@ -18,6 +20,7 @@ import com.upgrad.tms.util.TaskStatus;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
@@ -99,8 +102,13 @@ public class AssigneeMenu implements OptionsMenu {
 
     private void changeParentTaskStatusAfterChild() {
         List<Task> multipleTask = getMultipleTask();
-        if (multipleTask.size() > 3) {
-
+        if (multipleTask.size() > 2) {
+            CountDownLatch countDownLatch = new CountDownLatch(multipleTask.size()- 1);
+            Thread thread = new Thread(new ParentWorker(assigneeRepository, countDownLatch, multipleTask.get(0)));
+            thread.start();
+            for (int i = 1; i < multipleTask.size(); i++) {
+                new Thread(new ChildWorker(assigneeRepository, multipleTask.get(i), countDownLatch)).start();
+            }
         }
 
     }
