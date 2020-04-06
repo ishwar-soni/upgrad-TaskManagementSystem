@@ -49,8 +49,9 @@ public class AssigneeMenu implements OptionsMenu {
         System.out.println("6. Change multiple task status together");
         System.out.println("7. Run task according to the priority");
         System.out.println("8. Print location and url details for meetings");
-        System.out.println("9. Exit");
-        System.out.println("10. Change all task status to pending");
+        System.out.println("9. Change parent tas status after multiple child task are done");
+        System.out.println("10. Exit");
+        System.out.println("11. Change all task status to pending");
         int choice = 0;
 
             choice = sc.nextInt();
@@ -82,15 +83,26 @@ public class AssigneeMenu implements OptionsMenu {
                 printUrlAndLocationDetails();
                 break;
             case 9:
-                MainMenu.exit();
+                changeParentTaskStatusAfterChild();
                 break;
             case 10:
+                MainMenu.exit();
+                break;
+            case 11:
                 changeTaskStatusToPending();
                 break;
             default:
                 wrongInput();
         }
         showTopOptions();
+    }
+
+    private void changeParentTaskStatusAfterChild() {
+        List<Task> multipleTask = getMultipleTask();
+        if (multipleTask.size() > 3) {
+
+        }
+
     }
 
     private void printUrlAndLocationDetails() {
@@ -130,6 +142,17 @@ public class AssigneeMenu implements OptionsMenu {
     }
 
     private void changeMultipleTaskStatus() {
+        List<Task> taskList = getMultipleTask();
+        List<Thread> threadList = new ArrayList<>(taskList.size());
+        for (Task taskItem: taskList) {
+            Thread thread = new Thread(new TaskWorker(taskItem, assigneeRepository));
+            thread.setPriority(Thread.MAX_PRIORITY - taskItem.getPriority());
+            threadList.add(thread);
+        }
+        threadList.forEach(Thread::start);
+    }
+
+    private List<Task> getMultipleTask() {
         long taskId = 0;
         Scanner sc = new Scanner(System.in);
         List<Task> taskList = new ArrayList<>();
@@ -146,13 +169,7 @@ public class AssigneeMenu implements OptionsMenu {
                 }
             }
         } while (taskId != -1);
-        List<Thread> threadList = new ArrayList<>(taskList.size());
-        for (Task taskItem: taskList) {
-            Thread thread = new Thread(new TaskWorker(taskItem, assigneeRepository));
-            thread.setPriority(Thread.MAX_PRIORITY - taskItem.getPriority());
-            threadList.add(thread);
-        }
-        threadList.forEach(Thread::start);
+        return taskList;
     }
 
     private void changeTaskStatus() {
