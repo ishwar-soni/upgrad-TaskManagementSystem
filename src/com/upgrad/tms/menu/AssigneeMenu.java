@@ -21,6 +21,7 @@ import com.upgrad.tms.util.TaskStatus;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
@@ -104,10 +105,16 @@ public class AssigneeMenu implements OptionsMenu {
         List<Task> multipleTask = getMultipleTask();
         if (multipleTask.size() > 2) {
             CountDownLatch countDownLatch = new CountDownLatch(multipleTask.size()- 1);
+            CyclicBarrier cyclicBarrier = new CyclicBarrier(multipleTask.size() - 1 );
             Thread thread = new Thread(new ParentWorker(assigneeRepository, countDownLatch, multipleTask.get(0)));
             thread.start();
             for (int i = 1; i < multipleTask.size(); i++) {
-                new Thread(new ChildWorker(assigneeRepository, multipleTask.get(i), countDownLatch)).start();
+                new Thread(new ChildWorker(assigneeRepository, multipleTask.get(i), countDownLatch, cyclicBarrier)).start();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
