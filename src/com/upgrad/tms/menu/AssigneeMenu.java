@@ -7,6 +7,7 @@ import com.upgrad.tms.entities.Meeting;
 import com.upgrad.tms.entities.Task;
 import com.upgrad.tms.entities.Todo;
 import com.upgrad.tms.exception.NotFoundException;
+import com.upgrad.tms.exchanger.ExchangeTaskWorker;
 import com.upgrad.tms.meeting.LocationLocator;
 import com.upgrad.tms.meeting.MeetingLocationUrlWorker;
 import com.upgrad.tms.meeting.MeetingUrlLocationWorker;
@@ -92,10 +93,10 @@ public class AssigneeMenu implements OptionsMenu {
                 changeParentTaskStatusAfterChild();
                 break;
             case 10:
-                MainMenu.exit();
+                exchangeTitleOfTheTasks();
                 break;
             case 11:
-                exchangeTitleOfTheTasks();
+                MainMenu.exit();
                 break;
             case 12:
                 changeTaskStatusToPending();
@@ -109,6 +110,7 @@ public class AssigneeMenu implements OptionsMenu {
     private void exchangeTitleOfTheTasks() {
         List<Task> taskList = assigneeRepository.getAssignee(MainMenu.loggedInUserName).getTaskCalendar().getTaskList();
         Exchanger<String> exchanger = new Exchanger<>();
+        taskList.stream().map(task -> new Thread(new ExchangeTaskWorker(assigneeRepository, task, exchanger))).forEach(Thread::start);
     }
 
     private void changeParentTaskStatusAfterChild() {
