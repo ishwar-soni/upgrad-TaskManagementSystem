@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
@@ -54,8 +55,9 @@ public class AssigneeMenu implements OptionsMenu {
         System.out.println("7. Run task according to the priority");
         System.out.println("8. Print location and url details for meetings");
         System.out.println("9. Change parent tas status after multiple child task are done");
-        System.out.println("10. Exit");
-        System.out.println("11. Change all task status to pending");
+        System.out.println("10. Exchange title of the tasks");
+        System.out.println("11. Exit");
+        System.out.println("12. Change all task status to pending");
         int choice = 0;
 
             choice = sc.nextInt();
@@ -93,12 +95,20 @@ public class AssigneeMenu implements OptionsMenu {
                 MainMenu.exit();
                 break;
             case 11:
+                exchangeTitleOfTheTasks();
+                break;
+            case 12:
                 changeTaskStatusToPending();
                 break;
             default:
                 wrongInput();
         }
         showTopOptions();
+    }
+
+    private void exchangeTitleOfTheTasks() {
+        List<Task> taskList = assigneeRepository.getAssignee(MainMenu.loggedInUserName).getTaskCalendar().getTaskList();
+        Exchanger<String> exchanger = new Exchanger<>();
     }
 
     private void changeParentTaskStatusAfterChild() {
