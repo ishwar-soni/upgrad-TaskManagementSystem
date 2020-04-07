@@ -37,6 +37,10 @@ public abstract class PhaserAbstractWorker extends AbstractWorker {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        task.setStatus(TaskStatus.IN_PROGRESS);
+        System.out.println("In progress state: "+task.getId());
+        phaser.arriveAndAwaitAdvance();
+        System.out.println("After In Progress state: "+task.getId());
         System.out.println("Task id: "+task.getId()+ " Current thread priority: "+Thread.currentThread().getPriority());
         System.out.println("Completing Time: "+System.currentTimeMillis()+ " Task Id: "+task.getId()+ " Task Title: "+task.getTitle());
         task.setStatus(TaskStatus.DONE);

@@ -6,15 +6,13 @@ import com.upgrad.tms.repository.AssigneeRepository;
 
 import java.util.concurrent.Phaser;
 
-public class PhaserTaskWorker extends AbstractWorker implements Runnable {
+public class PhaserTaskWorker extends PhaserAbstractWorker implements Runnable {
 
     private final Task task;
-    private final Phaser phaser;
 
     public PhaserTaskWorker(AssigneeRepository assigneeRepository, Task task, Phaser phaser) {
-        super(assigneeRepository);
+        super(assigneeRepository, phaser);
         this.task = task;
-        this.phaser = phaser;
     }
 
     @Override

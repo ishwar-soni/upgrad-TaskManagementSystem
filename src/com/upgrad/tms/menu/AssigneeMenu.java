@@ -12,6 +12,7 @@ import com.upgrad.tms.meeting.LocationLocator;
 import com.upgrad.tms.meeting.MeetingLocationUrlWorker;
 import com.upgrad.tms.meeting.MeetingUrlLocationWorker;
 import com.upgrad.tms.meeting.UrlLocator;
+import com.upgrad.tms.phaser.PhaserTaskWorker;
 import com.upgrad.tms.priority.PriorityChildWorker;
 import com.upgrad.tms.priority.PriorityParentWorker;
 import com.upgrad.tms.priority.ShareObject;
@@ -111,6 +112,15 @@ public class AssigneeMenu implements OptionsMenu {
     private void runTasksInPhases() {
         List<Task> taskList = getMultipleTask();
         Phaser phaser = new Phaser(taskList.size());
+        List<Thread> threadList = taskList.stream().map(task -> new Thread(new PhaserTaskWorker(assigneeRepository, task, phaser))).collect(Collectors.toList());
+        for (Thread thread : threadList) {
+            thread.start();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void exchangeTitleOfTheTasks() {
