@@ -21,10 +21,7 @@ import com.upgrad.tms.util.TaskStatus;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Exchanger;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class AssigneeMenu implements OptionsMenu {
@@ -57,8 +54,9 @@ public class AssigneeMenu implements OptionsMenu {
         System.out.println("8. Print location and url details for meetings");
         System.out.println("9. Change parent tas status after multiple child task are done");
         System.out.println("10. Exchange title of the tasks");
-        System.out.println("11. Exit");
-        System.out.println("12. Change all task status to pending");
+        System.out.println("11. Run all tasks in phases");
+        System.out.println("12. Exit");
+        System.out.println("13. Change all task status to pending");
         int choice = 0;
 
             choice = sc.nextInt();
@@ -96,15 +94,23 @@ public class AssigneeMenu implements OptionsMenu {
                 exchangeTitleOfTheTasks();
                 break;
             case 11:
-                MainMenu.exit();
+                runTasksInPhases();
                 break;
             case 12:
+                MainMenu.exit();
+                break;
+            case 13:
                 changeTaskStatusToPending();
                 break;
             default:
                 wrongInput();
         }
         showTopOptions();
+    }
+
+    private void runTasksInPhases() {
+        List<Task> taskList = getMultipleTask();
+        Phaser phaser = new Phaser(taskList.size());
     }
 
     private void exchangeTitleOfTheTasks() {
