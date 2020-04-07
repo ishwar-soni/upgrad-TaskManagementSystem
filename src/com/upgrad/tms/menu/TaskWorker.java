@@ -19,6 +19,7 @@ public class TaskWorker extends AbstractWorker implements Runnable{
 
     @Override
     public void run() {
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY - task.getPriority());
         doWork();
     }
 }
